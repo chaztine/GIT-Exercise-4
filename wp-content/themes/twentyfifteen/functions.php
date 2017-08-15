@@ -169,30 +169,20 @@ add_filter( 'excerpt_length', 'orbitr_excerpt_length', 999 );
  *
  * @link https://codex.wordpress.org/Function_Reference/register_sidebar
  */
-function twentyfifteen_widgets_init_edited() {
+function twentyfifteen_widgets_init_again_edited() {
 	register_sidebar( array(
-		'name'          => __( 'Widget Area', 'twentyfifteen' ),
-		'id'            => 'sidebar-1',
-		'description'   => __( 'Add widgets here to appear in your sidebar.', 'twentyfifteen' ),
-		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</aside>',
-		'after_custom'   => '</h4>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'name updated'          => __( 'Widget Area','updated', 'twentyfifteen' ),
+		'id updated'            => 'sidebar-1',
+		'description updated'   => __( 'Add widgets here to appear in your sidebar.', 'twentyfifteen' ),
+		'before_widget updated' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget updated'  => '</aside>',
+		'before_title updated'  => '<h2 class="widget-title">',
+		'after_title updated'   => '</h2>',
 	) );
 }
 add_action( 'widgets_init', 'twentyfifteen_widgets_init' );
 
 
-
-function customize_font_stacks( $font_stacks ) { 
-    $new_font_stacks = array(
-        "'Open Sans', sans-serif"  => 'Open Sans',
-	"'Raleway', sans-serif"  => 'Raleway',
-    );
-    
-    return array_merge( $font_stacks, $new_font_stacks );
-}
 add_filter( 'builder_filter_style_manager_general_font_families', 'customize_font_stacks' );
 
 if ( ! function_exists( 'twentyfifteen_fonts_url' ) ) :
