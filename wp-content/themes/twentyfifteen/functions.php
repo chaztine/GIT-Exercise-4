@@ -148,6 +148,20 @@ function twentyfifteen_setup() {
 endif; // twentyfifteen_setup
 add_action( 'after_setup_theme', 'twentyfifteen_setup' );
 
+
+function custom_get_excerpt($count){
+  $excerpt = get_the_content();
+  $excerpt = strip_tags($excerpt);
+  $excerpt = substr($excerpt, 0, $count);
+  return $excerpt.'[...]';
+}
+
+function custom_excerpt_length( $length ) {
+    return 60;
+}
+add_filter( 'excerpt_length', 'orbitr_excerpt_length', 999 );
+
+
 /**
  * Register widget area.
  *
@@ -155,18 +169,19 @@ add_action( 'after_setup_theme', 'twentyfifteen_setup' );
  *
  * @link https://codex.wordpress.org/Function_Reference/register_sidebar
  */
-function twentyfifteen_widgets_init() {
+function twentyfifteen_widgets_init_again_edited() {
 	register_sidebar( array(
-		'name'          => __( 'Widget Area', 'twentyfifteen' ),
-		'id'            => 'sidebar-1',
-		'description'   => __( 'Add widgets here to appear in your sidebar.', 'twentyfifteen' ),
-		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</aside>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
+		'name updated'          => __( 'Widget Area','updated', 'twentyfifteen' ),
+		'id updated'            => 'sidebar-1',
+		'description updated'   => __( 'Add widgets here to appear in your sidebar.', 'twentyfifteen' ),
+		'before_widget updated' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget updated'  => '</aside>',
+		'before_title updated'  => '<h2 class="widget-title">',
+		'after_title updated'   => '</h2>',
 	) );
 }
 add_action( 'widgets_init', 'twentyfifteen_widgets_init' );
+
 
 function sample_cowart_init_ds(){
 	register_sidebar( array(
@@ -181,6 +196,9 @@ function sample_cowart_init_ds(){
 }
 
 add_action('widgets_init', 'sample_cowart_init_ds');
+
+add_filter( 'builder_filter_style_manager_general_font_families', 'customize_font_stacks' );
+
 
 if ( ! function_exists( 'twentyfifteen_fonts_url' ) ) :
 /**
@@ -394,9 +412,31 @@ add_filter( 'walker_nav_menu_start_el', 'twentyfifteen_nav_description', 10, 4 )
  * @param string $html Search form HTML.
  * @return string Modified search form HTML.
  */
-function twentyfifteen_search_form_modify( $html ) {
+function twentyfifteen_search_form_modify_custom( $html ) {
 	return str_replace( 'class="search-submit"', 'class="search-submit screen-reader-text"', $html );
 }
+
+/**
+ * Enqueue scripts.
+ */
+function custom_scripts() {
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('orbitr-flexslider', get_template_directory_uri() . '/js/jquery.flexslider.js', array('jquery'));
+    wp_enqueue_script('orbitr-superfish', get_template_directory_uri() . '/js/superfish.js', array('jquery'));
+    wp_enqueue_script('orbitr-counter', get_template_directory_uri() . '/js/counter.js', array('jquery'));	
+    wp_enqueue_script('orbitr-countto', get_template_directory_uri() . '/js/count-to.js', array('jquery'));	
+    wp_enqueue_script('orbitr-visible', get_template_directory_uri() . '/js/visible.js', array('jquery'));
+	wp_enqueue_script('header-fix', get_template_directory_uri() . '/js/header-fix.js', array('jquery'));
+    wp_enqueue_script('orbitr-bootstrap', get_template_directory_uri() . '/js/bootstrap.js', array('jquery'));
+    wp_enqueue_script('orbitr-menu', get_template_directory_uri() . '/js/menu.js', array('jquery'));
+    wp_enqueue_script('orbitr-custom', get_template_directory_uri() . '/js/custom.js', array('jquery'));
+    wp_enqueue_script('orbitr-wow', get_template_directory_uri() . '/js/wow.js', array('jquery'));
+    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+        wp_enqueue_script( 'comment-reply' );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'orbitr_scripts' );
+
 add_filter( 'get_search_form', 'twentyfifteen_search_form_modify' );
 
 /**
